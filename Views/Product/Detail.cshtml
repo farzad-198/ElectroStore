@@ -1,0 +1,73 @@
+﻿@model Product
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<nav>
+    Home > Products > @Model.Category?.Name > @Model.Name
+</nav>
+
+<img src="@Model.ImageUrl" alt="@Model.Name" />
+
+@if (Model.IsNew)
+{
+    <span class="badge bg-success">New</span>
+}
+
+<p>@Model.Category?.Name</p>
+
+@if (Model.Rating > 0)
+{
+    <p>
+        @for (int i = 1; i <= 5; i++)
+        {
+            if (i <= Model.Rating)
+            {
+                <span>★</span>
+            }
+            else
+            {
+                <span>☆</span>
+            }
+        }
+        (@Model.Rating)
+    </p>
+}
+
+<h2>@Model.Name</h2>
+
+@if (Model.OldPrice.HasValue && Model.OldPrice > Model.Price)
+{
+    <h3>$@Model.Price.ToString("N0")</h3>
+    <del>@Model.OldPrice.Value.ToString("N0")Kr</del>
+    <span>
+        @((int)((1 - Model.Price / Model.OldPrice.Value) * 100))% OFF
+    </span>
+}
+else
+{
+    <h3>$@Model.Price.ToString("N0")</h3>
+}
+
+<h5>Description</h5>
+<p>@Model.Description</p>
+
+<!-- ✅ Add to Cart واقعی -->
+<form asp-controller="Cart"
+      asp-action="Add"
+      method="post"
+      class="mb-3">
+
+    <input type="hidden" name="productId" value="@Model.Id" />
+    <input type="hidden" name="quantity" value="1" />
+
+    <button type="submit" class="btn btn-dark">
+        Add to Cart
+    </button>
+</form>
+
+<ul>
+    <li>Free Shipping</li>
+    <li>Warranty</li>
+    <li>Easy Returns</li>
+</ul>

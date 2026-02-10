@@ -1,0 +1,90 @@
+﻿@model List<ElectroStore.Models.Product>
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+<!-- ✅ HERO SECTION -->
+<div class="hero-section bg-gradient-primary text-white rounded-3 p-5 mb-5 shadow-lg">
+    <div class="row align-items-center">
+        <div class="col-lg-6">
+            <h1 class="display-4 fw-bold mb-3">
+                <i class="bi bi-lightning-charge-fill"></i> Welcome to ElectroStore
+            </h1>
+            <p class="lead mb-4">
+                Discover the latest electronics and gadgets. Quality products with fast delivery and trusted warranty.
+            </p>
+            <a asp-controller="Product" asp-action="Index" class="btn btn-light btn-lg px-4">
+                <i class="bi bi-arrow-right-circle"></i> Shop Now
+            </a>
+        </div>
+        <div class="col-lg-6 text-center">
+            <i class="bi bi-device-ssd display-1 opacity-75"></i>
+        </div>
+    </div>
+</div>
+
+<!-- ✅ SEARCH BOX -->
+<form asp-controller="Home"
+      asp-action="Index"
+      method="get"
+      class="mb-5">
+
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="input-group input-group-lg shadow-sm">
+                <input type="text"
+                       name="query"
+                       class="form-control"
+                       placeholder="Search products..."
+                       value="@Context.Request.Query["query"]" />
+
+                <button class="btn btn-primary" type="submit">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- ✅ PRODUCTS -->
+@if (Model != null && Model.Any())
+{
+    <div class="mb-4">
+        <h2 class="fw-bold mb-4">
+            <i class="bi bi-star-fill text-warning"></i>
+            @(
+                    string.IsNullOrWhiteSpace(Context.Request.Query["query"])
+                    ? "Featured Products"
+                    : "Search Results"
+                    )
+        </h2>
+    </div>
+
+    <div class="row g-4">
+        @foreach (var product in Model)
+        {
+            <div class="col-md-6 col-lg-3">
+                <partial name="_ProductCard" model="product" />
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="text-center py-5">
+        <i class="bi bi-inbox display-1 text-muted"></i>
+        <h3 class="text-muted mt-3">No products found</h3>
+
+        @if (!string.IsNullOrWhiteSpace(Context.Request.Query["query"]))
+        {
+            <p class="text-muted">
+                No results for "<strong>@Context.Request.Query["query"]</strong>"
+            </p>
+        }
+        else
+        {
+            <p class="text-muted">Check back soon for new arrivals!</p>
+        }
+    </div>
+}

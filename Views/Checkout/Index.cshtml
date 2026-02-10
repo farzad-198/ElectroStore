@@ -1,0 +1,83 @@
+﻿@{
+    ViewData["Title"] = "Checkout";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white border-0 py-3">
+                    <h4 class="fw-bold mb-0">
+                        Checkout
+                    </h4>
+                </div>
+
+                <div class="card-body p-4">
+
+                    <!-- ✅ User Info -->
+                    <div class="mb-3">
+                        <strong>Full Name:</strong>
+                        <span>@ViewBag.FullName</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Phone:</strong>
+                        <span>@ViewBag.Phone</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Address:</strong>
+                        <span>@ViewBag.Address</span>
+                    </div>
+
+                    <hr />
+
+                    <!-- ✅ Payment Methods (UI Only) -->
+                    <h5 class="fw-bold mb-3">Payment Method</h5>
+
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="payment" checked />
+                        <label class="form-check-label">
+                            💳 Credit / Debit Card
+                        </label>
+                    </div>
+
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="payment" />
+                        <label class="form-check-label">
+                            🏦 Bank Transfer
+                        </label>
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="radio" name="payment" />
+                        <label class="form-check-label">
+                            💵 Cash on Delivery
+                        </label>
+                    </div>
+
+                    <hr />
+
+                    <!-- ✅ Total -->
+                    <div class="mb-4">
+                        <strong>Total Price:</strong>
+                        <span class="fw-bold text-primary">
+                            @String.Format("{0:N0}", ViewBag.TotalPrice) Kr
+                        </span>
+                    </div>
+
+                    <!-- ✅ Submit -->
+                    <form asp-action="Index" method="post">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                            Confirm Order
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

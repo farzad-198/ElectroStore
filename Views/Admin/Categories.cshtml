@@ -1,0 +1,65 @@
+@model List<ElectroStore.Models.Category>
+
+@{
+    ViewData["Title"] = "Categories Management";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">
+        <i class="bi bi-tags text-primary"></i> Categories
+    </h2>
+    <a asp-action="CategoryCreate" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Add New Category
+    </a>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Products</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-4">
+                                No categories found
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var c in Model)
+                        {
+                            <tr>
+                                <td>@c.Id</td>
+                                <td>@c.Name</td>
+                                <td>@c.Description</td>
+                                <td>@c.Products.Count</td>
+                                <td>
+                                    <a asp-action="CategoryEdit" asp-route-id="@c.Id"
+                                       class="btn btn-sm btn-outline-primary">
+                                        Edit
+                                    </a>
+                                    <a asp-action="CategoryDelete" asp-route-id="@c.Id"
+                                       class="btn btn-sm btn-outline-primary">
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

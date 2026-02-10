@@ -1,0 +1,89 @@
+﻿@model ProductListVM
+@{
+    ViewData["Title"] = "Products";
+}
+
+<h2>All Products</h2>
+
+<h5>Filters</h5>
+
+<form method="get" asp-action="Index" class="mb-4">
+
+    <h6>Categories</h6>
+    <select name="categoryId" class="form-select mb-3">
+        <option value="">All Categories</option>
+        @foreach (var cat in Model.Categories)
+        {
+            <option value="@cat.Id"
+                    selected="@(Model.SelectedCategoryId == cat.Id)">
+                @cat.Name
+            </option>
+        }
+    </select>
+
+    <h6>Price Range</h6>
+    <input type="number"
+           name="maxPrice"
+           class="form-control mb-3"
+           placeholder="Max Price"
+           value="@(Model.MaxPrice > 0 ? Model.MaxPrice : null)" />
+
+    <h6>Sort By</h6>
+    <select name="sort" class="form-select mb-3">
+        <option value="newest" selected="@(Model.Sort == "newest")">Newest First</option>
+        <option value="priceAsc" selected="@(Model.Sort == "priceAsc")">Price: Low to High</option>
+        <option value="priceDesc" selected="@(Model.Sort == "priceDesc")">Price: High to Low</option>
+        <option value="name" selected="@(Model.Sort == "name")">Name A-Z</option>
+    </select>
+
+    <button type="submit" class="btn btn-dark w-100">Apply Filters</button>
+</form>
+
+@if (Model.Products != null && Model.Products.Any())
+{
+    <div class="row">
+        @foreach (var product in Model.Products)
+        {
+            <div class="col-md-3 mb-4">
+                <div class="card h-100">
+
+                    <img src="@product.ImageUrl"
+                         class="card-img-top"
+                         alt="@product.Name" />
+
+                    <div class="card-body d-flex flex-column">
+                        <h6>@product.Name</h6>
+                        <p class="mb-2">$@product.Price.ToString("N0")</p>
+
+                        <div class="mt-auto">
+                            <a asp-action="Detail"
+                               asp-route-id="@product.Id"
+                               class="btn btn-sm btn-outline-dark w-100 mb-2">
+                                View Details
+                            </a>
+
+                            <!-- ✅ Add to Cart (Simple POST Form) -->
+                            <form asp-controller="Cart"
+                                  asp-action="Add"
+                                  method="post">
+                                <input type="hidden" name="productId" value="@product.Id" />
+                                <input type="hidden" name="quantity" value="1" />
+
+                                <button type="submit"
+                                        class="btn btn-sm btn-dark w-100">
+                                    Add to Cart
+                                </button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <h4>No products found</h4>
+    <p>Try adjusting your filters or search terms.</p>
+}

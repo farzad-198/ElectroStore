@@ -1,0 +1,54 @@
+@model List<Order>
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">
+        <i class="bi bi-bag-check text-primary"></i> My Orders
+    </h2>
+</div>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="bg-white rounded-3 shadow-sm p-5 text-center">
+        <i class="bi bi-inbox display-1 text-muted"></i>
+        <h4 class="text-muted mt-3">No orders yet</h4>
+        <p class="text-muted mb-4">You haven't placed any orders. Start shopping to see your orders here!</p>
+        <a asp-controller="Product" asp-action="Index" class="btn btn-primary">
+            <i class="bi bi-arrow-right-circle"></i> Start Shopping
+        </a>
+    </div>
+}
+else
+{
+    <div class="bg-white rounded-3 shadow-sm p-4">
+        @foreach (var order in Model)
+        {
+            <div class="border-bottom pb-4 mb-4 last-child-border-0">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-1">
+                            <i class="bi bi-receipt text-primary"></i> Order #@order.Id
+                        </h5>
+                        <p class="text-muted small mb-0">
+                            <i class="bi bi-calendar"></i> @order.Date.ToString("MMMM dd, yyyy")
+                        </p>
+                    </div>
+                    <div class="text-end">
+                        <h5 class="fw-bold text-primary mb-1">$@order.Total.ToString("N0")</h5>
+                        <span class="badge bg-success">Completed</span>
+                    </div>
+                </div>
+                <div class="d-flex gap-2">
+                    <a asp-action="OrderDetail" asp-route-id="@order.Id" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-eye"></i> View Details
+                    </a>
+                    <button class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-download"></i> Invoice
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+}
